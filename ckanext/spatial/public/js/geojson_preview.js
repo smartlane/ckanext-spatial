@@ -4,10 +4,16 @@ ckan.module('geojsonpreview', function (jQuery, _) {
     options: {
       table: '<table class="table table-striped table-bordered table-condensed"><tbody>{body}</tbody></table>',
       row:'<tr><th>{key}</th><td>{value}</td></tr>',
-      style: {
-        opacity: 0.7,
-        fillOpacity: 0.1,
-        weight: 2
+      style: function(feature) {
+        var staticstyles = {
+            opacity: 0.7,
+            fillOpacity: 0.1,
+            weight: 5
+        };
+        if (feature.properties.stroke) {
+            staticstyles['color'] = feature.properties.stroke;
+        }
+        return staticstyles;
       },
       i18n: {
         'error': _('An error occurred: %(text)s %(error)s')
@@ -15,7 +21,7 @@ ckan.module('geojsonpreview', function (jQuery, _) {
     },
     initialize: function () {
       var self = this;
-
+      
       self.el.empty();
       self.el.append($("<div></div>").attr("id","map"));
       self.map = ckan.commonLeafletMap('map', this.options.map_config);
