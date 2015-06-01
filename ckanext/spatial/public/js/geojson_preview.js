@@ -60,14 +60,13 @@ ckan.module('geojsonpreview', function (jQuery, _) {
       self.el.empty();
       self.el.append($("<div></div>").attr("id","map"));
       self.map = ckan.commonLeafletMap('map', this.options.map_config);
-      
       self.realtime = L.realtime({
         url: preload_resource['original_url'],
         crossOrigin: false,
         type: 'json'
       },
       {
-        interval: 30000,
+        interval: 1000,
         style: self.options.style,
         pointToLayer: function(feature, latlng) {
           return new L.CircleMarker(latlng, self.options.style);
@@ -99,9 +98,9 @@ ckan.module('geojsonpreview', function (jQuery, _) {
 
     showError: function (jqXHR, textStatus, errorThrown) {
       if (textStatus == 'error' && jqXHR.responseText.length) {
-        this.el.html(jqXHR.responseText);
+        console.log(jqXHR.responseText);
       } else {
-        this.el.html(this.i18n('error', {text: textStatus, error: errorThrown}));
+        console.log(this.i18n('error', {text: textStatus, error: errorThrown}));
       }
     }
   };
