@@ -14,3 +14,26 @@ html, body {
 #map .table{
   width: 300px;
 }
+
+td {
+  padding: 0px;
+  margin: 0px;
+}
+
+/* Override CKAN styles */
+label::after {
+  content: "";
+}
+
+label {
+  font-weight: normal;
+  margin-bottom: 0px;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  top: 0px;
+}
+
+form {
+  margin: 0px;
+}

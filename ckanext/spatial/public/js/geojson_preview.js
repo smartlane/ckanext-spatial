@@ -60,6 +60,44 @@ ckan.module('geojsonpreview', function (jQuery, _) {
       self.el.empty();
       self.el.append($("<div></div>").attr("id","map"));
       self.map = ckan.commonLeafletMap('map', this.options.map_config);
+      var transport;
+      self.map.eachLayer(function (layer) {
+if (layer.setOpacity) {
+ transport = layer;
+}}); 
+var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: this.options.map_config.attribution,//'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxNativeZoom: 18
+});
+      var Stamen_TonerLabels = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-labels/{z}/{x}/{y}.png', {
+	attribution: this.options.map_config.attribution,//'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 20,
+	
+        ext: 'png'
+});
+      var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
+	attribution: this.options.map_config.attribution,//'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 20,
+	ext: 'png'
+});
+     var Thunderforest_Transport = L.tileLayer('http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	maxZoom: 19
+});
+      var baseMaps = {
+    "Full": transport,
+    "Plan": Stamen_TonerLite,
+    "Satellite": Esri_WorldImagery
+     };
+
+var overlayMaps = {
+    "Street labels": Stamen_TonerLabels
+};
+    L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(self.map);
       self.realtime = L.realtime({
         url: preload_resource['original_url'],
         crossOrigin: false,
